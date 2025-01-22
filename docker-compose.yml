@@ -11,6 +11,11 @@ services:
     volumes:
       - shard1_data:/var/lib/mysql
       - ./create_db_table_1.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   mysql_shard_2:
     image: mysql:8.0
@@ -24,6 +29,11 @@ services:
     volumes:
       - shard2_data:/var/lib/mysql
       - ./create_db_table_2.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   proxysql:
     image: proxysql/proxysql
@@ -33,6 +43,11 @@ services:
       - "6033:6033"
     volumes:
       - ./proxysql.cnf:/etc/proxysql.cnf
+    depends_on:
+      mysql_shard_1:
+        condition: service_healthy
+      mysql_shard_2:
+        condition: service_healthy
 
   elasticsearch:
     image: elasticsearch:8.5.0
@@ -51,9 +66,8 @@ services:
       context: ./node_client
     container_name: node_client
     command: ["node", "app.js"]
+    # command: tail -f /dev/null
     depends_on:
-      - mysql_shard_1
-      - mysql_shard_2
       - proxysql
       - elasticsearch
     environment:

@@ -14,13 +14,12 @@ const mysql = require('mysql2/promise');
 const { Client } = require('@elastic/elasticsearch');
 
 /**
- * `faker` modülü, test ve geliştirme gibi çeşitli amaçlar için sahte veriler oluşturmak için kullanılır.
+ * `@faker-js/faker` modülü, test ve geliştirme gibi çeşitli amaçlar için sahte veriler oluşturmak için kullanılır.
  * Rastgele isimler, adresler, telefon numaraları ve diğer veri türlerini oluşturmak için geniş bir yöntem yelpazesi sunar.
  * 
- * @module faker
+ * @module @faker-js/faker
  */
-const faker = require('faker');
-
+const { faker } = require('@faker-js/faker');
 
 const elasticClient = new Client({ node: process.env.ELASTICSEARCH_HOST });
 
@@ -36,11 +35,12 @@ const elasticClient = new Client({ node: process.env.ELASTICSEARCH_HOST });
     // Rastgele veriler oluştur ve shard'lara dağıt
     for (let i = 1; i <= 300000; i++) {
         const shard = `shard${(i % shard_count) + 1}_db`;
-        const name = faker.name.findName();
-        const email = faker.internet.email();
-        const sex = faker.name.gender();
+        const sex = faker.person.sex();
+        const name = faker.person.firstName(sex);
+        const email = faker.internet.email({ firstName: name});
         
         const query = `INSERT INTO ${shard}.test_table (name, email, sex) VALUES (?, ?, ?)`;
+        console.log(`Executing query: ${query} with values: [${name}, ${email}, ${sex}]`);
         await pool.query(query, [name, email, sex]);
     }
 

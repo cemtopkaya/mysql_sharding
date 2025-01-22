@@ -50,3 +50,5 @@ Shard’lara bölünmüş veriler, her bir sunucuda farklı veri parçalarını 
 Merkezi endekslemenin temel maksadı, büyük ve dağıtık bir sistemdeki veri parçalarının (örneğin, shard’lara bölünmüş veritabanları) hızlı ve etkili bir şekilde aranabilir hâle getirilmesidir. Bu, özellikle verinin birçok farklı kaynaktan geldiği, parçalar hâlinde saklandığı ve doğrudan sorgulanmasının zor olduğu durumlarda kritik öneme sahiptir.
 
 Endeksleme sayesinde, tüm shard’lara rastgele sorgular göndermek yerine yalnızca ilgili sunuculara ulaşılır. Bu da sistemin genel yükünü azaltır ve performansı artırır.
+
+`http://localhost:9200/central_index/_search` Adresine yapılacak istekle endekslenen kayıtları görmek mümkün.
