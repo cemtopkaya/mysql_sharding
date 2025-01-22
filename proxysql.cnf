@@ -1,4 +1,11 @@
 datadir="/var/lib/proxysql"
+/*
+ * admin_variables:
+ * Bu bölüm, ProxySQL için yönetim ayarlarını tanımlar.
+ * 
+ * - admin_credentials: Yönetim arayüzü için kullanıcı adı ve şifreyi belirtir.
+ * - mysql_ifaces: Yönetim arayüzünün dinlediği ağ arayüzlerini ve portları tanımlar.
+ */
 admin_variables=
 {
     admin_credentials="admin:admin;"
@@ -32,6 +39,15 @@ mysql_users =
     { username = "root", password = "rootpassword", default_hostgroup = 1, active = 1 }
 )
 
+/*
+ * mysql_query_rules:
+ * Bu bölüm, ProxySQL'in gelen sorguları nasıl yönlendireceğini tanımlar.
+ * 
+ * - rule_id: Her kural için benzersiz bir kimlik.
+ * - match_pattern: Sorgunun eşleşeceği desen. Bu desen, sorgunun hangi veritabanına yönlendirileceğini belirler.
+ * - destination_hostgroup: Eşleşen sorgunun yönlendirileceği hedef hostgroup.
+ * - apply: Kuralın uygulanıp uygulanmayacağını belirler.
+ */
 mysql_query_rules =
 (
     { rule_id=1, match_pattern=".*shard1_db.*", destination_hostgroup=1, apply=1 }

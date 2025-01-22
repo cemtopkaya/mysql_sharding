@@ -24,7 +24,7 @@
 +----------------+               +----------------+
 ```
 
-# Sharding (Parçalama)
+## Sharding (Parçalama)
 Shard’lama, büyük veri kümelerini daha küçük, yönetilebilir parçalara bölme işlemidir. Bu işlem, veritabanı performansını artırmak ve ölçeklenebilirliği sağlamak için kullanılır. Shard’lama, verilerin yatay olarak bölünmesi anlamına gelir; yani, her shard, veritabanının tam bir kopyası yerine, veritabanının bir alt kümesini içerir.
 
 Proje kapsamında, veriler iki MySQL shard’ına bölünmüştür: `shard1_db` ve `shard2_db`. Her shard, belirli bir veri alt kümesini saklar ve bu sayede sorguların daha hızlı ve verimli bir şekilde işlenmesi sağlanır. ProxySQL, istemciden gelen sorguları uygun shard’a yönlendirir. Bu, veritabanı yükünü dengeler ve performansı artırır.
@@ -32,7 +32,7 @@ Proje kapsamında, veriler iki MySQL shard’ına bölünmüştür: `shard1_db` 
 Shard’lama işlemi, verilerin belirli bir mantıksal kurala göre dağıtılmasıyla gerçekleştirilir. Örneğin, bu projede veriler, belirli bir sayıya göre shard’lara dağıtılmıştır. Bu sayede, her shard, veritabanının belirli bir bölümünü içerir ve sorgular, ilgili shard’a yönlendirilerek işlenir.
 
 
-# Query Router (ProxSQL)
+## Query Router (ProxSQL)
 ProxySQL, istemciden gelen sorguları uygun MySQL shard'larına yönlendiren bir sorgu yönlendiricisidir. Bu projede kullanılan ProxySQL'in ayar dosyası `proxysql.cnf` olarak adlandırılmıştır ve aşağıdaki bileşenleri içerir:
 
 - `admin_variables`: ProxySQL'in yönetim arayüzü için gerekli ayarları içerir. Örneğin, `admin_credentials` yönetim arayüzüne erişim için gerekli kullanıcı adı ve şifreyi tanımlar.
@@ -44,7 +44,7 @@ ProxySQL, istemciden gelen sorguları uygun MySQL shard'larına yönlendiren bir
 Bu ayarlar sayesinde ProxySQL, istemciden gelen sorguları uygun shard'a yönlendirir ve veritabanı yükünü dengeler. Bu da sistemin performansını artırır ve ölçeklenebilirliği sağlar.
 
 
-# Merkezi Endeksleme (Elasticsearch)
+## Merkezi Endeksleme (Elasticsearch)
 Shard’lara bölünmüş veriler, her bir sunucuda farklı veri parçalarını saklar. Merkezi endeksleme bu parçaları bir arada tutar ve birleşik bir görünüm sağlar.
 
 Merkezi endekslemenin temel maksadı, büyük ve dağıtık bir sistemdeki veri parçalarının (örneğin, shard’lara bölünmüş veritabanları) hızlı ve etkili bir şekilde aranabilir hâle getirilmesidir. Bu, özellikle verinin birçok farklı kaynaktan geldiği, parçalar hâlinde saklandığı ve doğrudan sorgulanmasının zor olduğu durumlarda kritik öneme sahiptir.

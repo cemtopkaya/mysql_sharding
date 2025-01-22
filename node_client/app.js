@@ -1,8 +1,26 @@
+/**
+ * `mysql2/promise` MySQL veritabanına bağlanmak ve sorgular yürütmek için kullanılır.
+ *
+ * @module mysql2/promise 
+ */
 const mysql = require('mysql2/promise');
 
-// https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/client-connecting.html
+/**
+ * `@elastic/elasticsearch` modülü, Elasticsearch ile etkileşimde bulunmak için kullanılır.
+ * Bu modül, Elasticsearch'e veri indeksleme, arama ve diğer işlemleri gerçekleştirmek için çeşitli yöntemler sunar.
+ *
+ * @module @elastic/elasticsearch
+ */ 
 const { Client } = require('@elastic/elasticsearch');
+
+/**
+ * `faker` modülü, test ve geliştirme gibi çeşitli amaçlar için sahte veriler oluşturmak için kullanılır.
+ * Rastgele isimler, adresler, telefon numaraları ve diğer veri türlerini oluşturmak için geniş bir yöntem yelpazesi sunar.
+ * 
+ * @module faker
+ */
 const faker = require('faker');
+
 
 const elasticClient = new Client({ node: process.env.ELASTICSEARCH_HOST });
 
