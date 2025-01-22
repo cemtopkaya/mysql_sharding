@@ -1,0 +1,40 @@
+datadir="/var/lib/proxysql"
+admin_variables=
+{
+    admin_credentials="admin:admin;"
+    mysql_ifaces="0.0.0.0:6032"
+}
+
+# ProxySQL'in MySQL trafiğini işlemek için kullandığı arka plan iş parçacıklarının sayısı.
+# Bu iş parçacıklarına ek olarak, aşağıdaki gibi diğer "yönetim" iş parçacıkları da bulunmaktadır:
+# - Yönetim arayüzü iş parçacığı
+# - Arka uç sunucularla etkileşime giren izleme modülü iş parçacıkları (bağlantıyı izlemek için bir tane, sunucuları pinglemek için bir tane ve replikasyon gecikmesini izlemek için bir tane)
+# - Yanıt vermeyen uzun süreli sorguları sonlandırmak için oluşturulan geçici iş parçacıkları
+# - MySQL sunucularıyla belirli etkileşimleri asenkron hale getirmek için libmariadbclient kütüphanesi tarafından kullanılan arka plan iş parçacıkları
+#
+# Bu değeri değiştirmek çalışma zamanında etkili olmaz, değiştirmek için proxy'yi yeniden başlatmanız gerekir.
+# mysql-threads değerini değiştirdikten sonra, bu değişken çalışma zamanında yüklenemeyeceği için LOAD MYSQL VARIABLES TO RUNTIME komutunu çalıştırmamalısınız.
+# Çalışma zamanında yüklemeye çalışmak, değişkenlerin sıfırlanmasına neden olur.
+# Başka bir deyişle, mysql-threads değerini değiştirdikten sonra SAVE MYSQL VARIABLES TO DISK komutunu çalıştırmalı ve ardından ProxySQL'i yeniden başlatmalısınız (örneğin PROXYSQL RESTART komutunu kullanarak).
+mysql_variables=
+{
+    threads=4
+}
+
+mysql_servers =
+(
+    { address="mysql_shard_1", port=3306, hostgroup=1, max_connections=100 }
+   ,{ address="mysql_shard_2", port=3306, hostgroup=2, max_connections=100 }
+)
+
+mysql_users =
+(
+    { username = "root", password = "rootpassword", default_hostgroup = 1, active = 1 }
+)
+
+mysql_query_rules =
+(
+    { rule_id=1, match_pattern=".*shard1_db.*", destination_hostgroup=1, apply=1 }
+   ,{ rule_id=2, match_pattern=".*shard2_db.*", destination_hostgroup=2, apply=1 }
+)
+
